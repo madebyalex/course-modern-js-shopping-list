@@ -1,3 +1,3 @@
 # Shopping List Project
 
-Simple shopping list app from the Modern JS course by Brad Traversy.
+A shopping list web app from the Modern JS course by Brad Traversy.

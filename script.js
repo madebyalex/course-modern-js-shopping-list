@@ -1,7 +1,7 @@
 const itemForm = document.getElementById('item-form');
 const itemInput = document.getElementById('item-input');
 const itemList = document.getElementById('item-list');
-const itemFilter = document.querySelector('.filter');
+const itemFilter = document.getElementById('filter-bar');
 const clearBtn = document.getElementById('clear');
 
 function addItem(e) {
@@ -68,6 +68,23 @@ function clearItems() {
   }
 }
 
+function filterItems(e) {
+  const text = e.target.value.toLowerCase();
+  const items = itemList.querySelectorAll('li');
+
+  items.forEach((item, index) => {
+    const itemTitle = item.firstChild.textContent.toLowerCase();
+
+    if (itemTitle.indexOf(text) != -1) {
+      item.style.display = 'flex';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+
+  console.log(text);
+}
+
 function resetState() {
   const items = itemList.querySelectorAll('li');
 
@@ -78,6 +95,8 @@ function resetState() {
     itemFilter.style.display = 'block';
     clearBtn.style.display = 'block';
   }
+
+  itemFilter.querySelector('.form-input-filter').value = '';
 }
 
 resetState();
@@ -86,6 +105,7 @@ resetState();
 itemForm.addEventListener('submit', addItem);
 itemList.addEventListener('click', removeItem);
 clearBtn.addEventListener('click', clearItems);
+itemFilter.addEventListener('input', filterItems);
 
 /* Just Testing Events */
 // const logo = document.querySelector('header img');

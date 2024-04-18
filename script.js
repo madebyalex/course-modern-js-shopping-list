@@ -4,7 +4,7 @@ const itemList = document.getElementById('item-list');
 const itemFilter = document.getElementById('filter-bar');
 const clearBtn = document.getElementById('clear');
 
-function addItem(e) {
+function onAddItemSubmit(e) {
   e.preventDefault();
 
   const newItem = itemInput.value;
@@ -14,8 +14,20 @@ function addItem(e) {
     return;
   }
 
+  // Create item DOM element
+  addItemToDOM(newItem);
+
+  // Add item to local storage
+  addItemToStorage(newItem);
+  resetState();
+
+  itemInput.value = '';
+  itemInput.focus();
+}
+
+function addItemToDOM(item) {
   const li = document.createElement('li');
-  li.appendChild(document.createTextNode(newItem));
+  li.appendChild(document.createTextNode(item));
 
   const removeBtn = createCustomElement(
     'button',
@@ -28,10 +40,22 @@ function addItem(e) {
 
   // Adding a new li to the DOM
   itemList.appendChild(li);
-  resetState();
+}
 
-  itemInput.value = '';
-  itemInput.focus();
+function addItemToStorage(item) {
+  let itemsFromStorage;
+
+  if (localStorage.getItem('items') == null) {
+    itemsFromStorage = [];
+  } else {
+    itemsFromStorage = JSON.parse(localStorage.getItem('items'));
+  }
+
+  // Add new item to array
+  itemsFromStorage.push(item);
+
+  // Convert to JSON string and set to local storage
+  localStorage.setItem('items', JSON.stringify(itemsFromStorage));
 }
 
 function createCustomElement(type, classes) {
@@ -40,7 +64,7 @@ function createCustomElement(type, classes) {
   return el;
 }
 
-function removeItem(e) {
+function removeItemFromDOM(e) {
   if (e.target.parentElement.classList.contains('remove-item')) {
     // if (confirm('Are you sure?')) {
     e.target.parentElement.parentElement.remove();
@@ -49,6 +73,8 @@ function removeItem(e) {
     // }
   }
 }
+
+function removeItemFromStorage() {}
 
 function clearItems() {
   const items = itemList.querySelectorAll('li');
@@ -102,8 +128,8 @@ function resetState() {
 resetState();
 
 // Event Listeners
-itemForm.addEventListener('submit', addItem);
-itemList.addEventListener('click', removeItem);
+itemForm.addEventListener('submit', onAddItemSubmit);
+itemList.addEventListener('click', removeItemFromDOM);
 clearBtn.addEventListener('click', clearItems);
 itemFilter.addEventListener('input', filterItems);
 

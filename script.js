@@ -4,6 +4,13 @@ const itemList = document.getElementById('item-list');
 const itemFilter = document.getElementById('filter-bar');
 const clearBtn = document.getElementById('clear');
 
+function displayItems() {
+  const itemsFromStorage = getItemsFromStorage();
+
+  itemsFromStorage.forEach((item) => addItemToDOM(item));
+  resetState();
+}
+
 function onAddItemSubmit(e) {
   e.preventDefault();
 
@@ -20,9 +27,16 @@ function onAddItemSubmit(e) {
   // Add item to local storage
   addItemToStorage(newItem);
   resetState();
+  getItemsFromStorage();
 
   itemInput.value = '';
   itemInput.focus();
+}
+
+function createCustomElement(type, classes) {
+  const el = document.createElement(type);
+  el.classList = classes;
+  return el;
 }
 
 function addItemToDOM(item) {
@@ -43,13 +57,7 @@ function addItemToDOM(item) {
 }
 
 function addItemToStorage(item) {
-  let itemsFromStorage;
-
-  if (localStorage.getItem('items') == null) {
-    itemsFromStorage = [];
-  } else {
-    itemsFromStorage = JSON.parse(localStorage.getItem('items'));
-  }
+  const itemsFromStorage = getItemsFromStorage();
 
   // Add new item to array
   itemsFromStorage.push(item);
@@ -58,10 +66,17 @@ function addItemToStorage(item) {
   localStorage.setItem('items', JSON.stringify(itemsFromStorage));
 }
 
-function createCustomElement(type, classes) {
-  const el = document.createElement(type);
-  el.classList = classes;
-  return el;
+function getItemsFromStorage() {
+  let itemsFromStorage;
+
+  if (localStorage.getItem('items') == null) {
+    itemsFromStorage = [];
+  } else {
+    itemsFromStorage = JSON.parse(localStorage.getItem('items'));
+  }
+
+  console.log(itemsFromStorage);
+  return itemsFromStorage;
 }
 
 function removeItemFromDOM(e) {
@@ -74,7 +89,15 @@ function removeItemFromDOM(e) {
   }
 }
 
-function removeItemFromStorage() {}
+// function removeItemFromStorage(item) {
+//   const itemsFromStorage = getItemsFromStorage();
+
+//   itemsFromStorage.forEach(itemInStorage => {
+//     if (itemInStorage.indexOf(item) != -1) {
+
+//     }
+//   })
+// }
 
 function clearItems() {
   const items = itemList.querySelectorAll('li');
@@ -107,8 +130,6 @@ function filterItems(e) {
       item.style.display = 'none';
     }
   });
-
-  console.log(text);
 }
 
 function resetState() {
@@ -125,13 +146,20 @@ function resetState() {
   itemFilter.querySelector('.form-input-filter').value = '';
 }
 
-resetState();
+// Initialize the app
 
-// Event Listeners
-itemForm.addEventListener('submit', onAddItemSubmit);
-itemList.addEventListener('click', removeItemFromDOM);
-clearBtn.addEventListener('click', clearItems);
-itemFilter.addEventListener('input', filterItems);
+function init() {
+  // Event Listeners
+  document.addEventListener('DOMContentLoaded', displayItems);
+  itemForm.addEventListener('submit', onAddItemSubmit);
+  itemList.addEventListener('click', removeItemFromDOM);
+  clearBtn.addEventListener('click', clearItems);
+  itemFilter.addEventListener('input', filterItems);
+
+  resetState();
+}
+
+init();
 
 /* Just Testing Events */
 // const logo = document.querySelector('header img');

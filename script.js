@@ -3,6 +3,11 @@ const itemInput = document.getElementById('item-input');
 const itemList = document.getElementById('item-list');
 const itemFilter = document.getElementById('filter-bar');
 const clearBtn = document.getElementById('clear');
+let isEditMode = false;
+const overlay = document.getElementById('overlay');
+const editBtnSave = document.getElementById('edit-btn-save');
+const editBtnCancel = document.getElementById('edit-btn-cancel');
+const editTextField = document.getElementById('edit-textfield');
 
 function displayItems() {
   const itemsFromStorage = getItemsFromStorage();
@@ -16,6 +21,7 @@ function onAddItemSubmit(e) {
 
   const newItem = itemInput.value;
 
+  // Validate the input
   if (newItem === '') {
     alert('Please type an item');
     return;
@@ -43,11 +49,8 @@ function addItemToDOM(item) {
   const li = document.createElement('li');
   li.appendChild(document.createTextNode(item));
 
-  const removeBtn = createCustomElement(
-    'button',
-    'remove-item btn-link text-red'
-  );
-  const icon = createCustomElement('i', 'fa-solid fa-xmark');
+  const removeBtn = createCustomElement('button', 'remove-item btn-link');
+  const icon = createCustomElement('i', 'fa-regular fa-trash-alt');
 
   removeBtn.appendChild(icon);
   li.appendChild(removeBtn);
@@ -75,19 +78,59 @@ function getItemsFromStorage() {
     itemsFromStorage = JSON.parse(localStorage.getItem('items'));
   }
 
-  // console.log(itemsFromStorage);
   return itemsFromStorage;
 }
 
 function onClickItem(e) {
   if (e.target.parentElement.classList.contains('remove-item')) {
     removeItemFromDOM(e.target.parentElement.parentElement);
+  } else if (e.target.tagName == 'LI') {
+    // console.log('Edit mode');
+    setItemToEdit(e.target);
   }
 }
 
-function removeItemFromDOM(item) {
-  // console.log(item);
+function setItemToEdit(item) {
+  isEditMode = true;
+  document.body.classList.add('edit-mode');
+  item.classList.add('active');
+  editTextField.focus();
+  editTextField.value = item.textContent;
+}
 
+function saveEditMode(e) {
+  e.preventDefault();
+  // Check for Edit mode
+  if (isEditMode) {
+    const itemToEdit = itemList.querySelector('.active');
+
+    removeItemFromStorage(itemToEdit.textContent);
+    itemToEdit.classList.remove('active');
+    itemToEdit.remove();
+
+    addItemToDOM(editTextField.value);
+    addItemToStorage(editTextField.value);
+    resetState();
+    getItemsFromStorage();
+
+    exitEditMode(e);
+  }
+}
+
+function exitEditMode(e) {
+  e.preventDefault();
+
+  isEditMode = false;
+  document.body.classList.remove('edit-mode');
+  itemList.querySelectorAll('li').forEach((item) => {
+    item.classList.remove('active');
+  });
+
+  editTextField.blur();
+  // itemInput.focus();
+}
+
+function removeItemFromDOM(item) {
   // Remove item from DOM
   item.remove();
 
@@ -95,11 +138,6 @@ function removeItemFromDOM(item) {
   removeItemFromStorage(item.textContent);
 
   resetState();
-
-  // if (e.target.parentElement.classList.contains('remove-item')) {
-  //   e.target.parentElement.parentElement.remove();
-  //   resetState();
-  // }
 }
 
 function removeItemFromStorage(item) {
@@ -124,6 +162,8 @@ function clearItems() {
     while (itemList.firstChild) {
       itemList.removeChild(itemList.firstChild);
     }
+
+    localStorage.removeItem('items');
 
     resetState();
   }
@@ -159,32 +199,17 @@ function resetState() {
 }
 
 // Initialize the app
-
 function init() {
-  // Event Listeners
   document.addEventListener('DOMContentLoaded', displayItems);
   itemForm.addEventListener('submit', onAddItemSubmit);
   itemList.addEventListener('click', onClickItem);
   clearBtn.addEventListener('click', clearItems);
   itemFilter.addEventListener('input', filterItems);
+  overlay.addEventListener('click', exitEditMode);
+  editBtnSave.addEventListener('click', saveEditMode);
+  editBtnCancel.addEventListener('click', exitEditMode);
 
   resetState();
 }
 
 init();
-
-/* Just Testing Events */
-// const logo = document.querySelector('header img');
-// const headline = document.querySelector('h1');
-// const headlineDefault = headline.innerText;
-
-// const onDragLogo = (e) => {
-//   headline.textContent = `X ${e.clientX} Y ${e.clientY}`;
-// };
-
-// const onDragLogoEnd = (e) => {
-//   headline.textContent = headlineDefault;
-// };
-
-// logo.addEventListener('drag', onDragLogo);
-// logo.addEventListener('dragend', onDragLogoEnd);

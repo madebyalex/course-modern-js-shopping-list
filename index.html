@@ -15,65 +15,87 @@
     <title>Shopping List</title>
   </head>
   <body>
+    <div id="overlay"></div>
     <div class="container">
-      <header>
-        <img src="images/note.png" alt="" />
-        <h1>Shopping List</h1>
-      </header>
-      <form id="item-form">
-        <div class="form-control">
+      <div id="app">
+        <header>
+          <!-- <img src="images/note.png" alt="" /> -->
+          <span class="title-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <title>Shopping-basket</title>
+              <g fill="none">
+                <path
+                  d="M10 13.25a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 1 .75-.75z"
+                  fill="#212426"
+                ></path>
+                <path
+                  d="M14.75 14a.75.75 0 0 0-1.5 0v2a.75.75 0 0 0 1.5 0v-2z"
+                  fill="#212426"
+                ></path>
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M9.65 3.375a.75.75 0 0 0-1.3-.75l-2 3.464a.752.752 0 0 0-.069.161H6a2.75 2.75 0 0 0-1.739 4.88l.667 4.585.447 2.093a3.049 3.049 0 0 0 2.561 2.384c2.697.375 5.431.375 8.128 0a3.049 3.049 0 0 0 2.561-2.384l.447-2.093.667-4.585A2.75 2.75 0 0 0 18 6.25h-.281a.754.754 0 0 0-.07-.16l-2-3.465a.75.75 0 1 0-1.298.75l1.66 2.875H7.99l1.66-2.875zm8.484 8.372a2.819 2.819 0 0 1-.134.003H6c-.045 0-.09-.001-.133-.003l.538 3.703.437 2.045a1.549 1.549 0 0 0 1.301 1.211c2.559.356 5.155.356 7.714 0a1.549 1.549 0 0 0 1.301-1.21l.437-2.046.539-3.703zM4.75 9c0-.69.56-1.25 1.25-1.25h12a1.25 1.25 0 1 1 0 2.5H6c-.69 0-1.25-.56-1.25-1.25z"
+                  fill="#212426"
+                ></path>
+              </g>
+            </svg>
+          </span>
+          <h1>Shopping List</h1>
+        </header>
+        <form id="item-form">
+          <div class="form-control">
+            <input
+              type="text"
+              class="form-input"
+              id="item-input"
+              name="item"
+              placeholder="Enter Item"
+            />
+          </div>
+          <div class="form-control">
+            <button type="submit" class="btn">
+              <i class="fa-solid fa-plus"></i> Add Item
+            </button>
+          </div>
+        </form>
+
+        <div id="filter-bar">
           <input
             type="text"
-            class="form-input"
-            id="item-input"
-            name="item"
-            placeholder="Enter Item"
+            class="form-input-filter"
+            id="filter"
+            placeholder="Filter Items"
           />
         </div>
-        <div class="form-control">
-          <button type="submit" class="btn">
-            <i class="fa-solid fa-plus"></i> Add Item
-          </button>
-        </div>
-      </form>
 
-      <div id="filter-bar">
-        <input
-          type="text"
-          class="form-input-filter"
-          id="filter"
-          placeholder="Filter Items"
-        />
+        <ul id="item-list" class="items"></ul>
+
+        <button id="clear" class="btn-clear">Clear All</button>
       </div>
+    </div>
 
-      <ul id="item-list" class="items">
-        <!-- <li>
-          Apples
-          <button class="remove-item btn-link text-red">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </li>
-        <li>
-          Orange Juice
-          <button class="remove-item btn-link text-red">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </li>
-        <li>
-          Oreos
-          <button class="remove-item btn-link text-red">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </li>
-        <li>
-          Milk
-          <button class="remove-item btn-link text-red">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </li> -->
-      </ul>
-
-      <button id="clear" class="btn-clear">Clear All</button>
+    <div class="modal" id="edit-panel">
+      <div class="container">
+        <h1>Edit item</h1>
+        <form id="edit-item">
+          <input type="text" name="edit-textfield" id="edit-textfield" />
+          <footer>
+            <button class="btn secondary" id="edit-btn-cancel">Cancel</button>
+            <input
+              class="btn primary"
+              type="submit"
+              id="edit-btn-save"
+              value="Save"
+            />
+          </footer>
+        </form>
+      </div>
     </div>
 
     <script src="script.js"></script>

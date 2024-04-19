@@ -27,6 +27,11 @@ function onAddItemSubmit(e) {
     return;
   }
 
+  if (checkDuplicates(newItem)) {
+    alert('The item "' + newItem + '" is already added.');
+    return;
+  }
+
   // Create item DOM element
   addItemToDOM(newItem);
 
@@ -47,7 +52,7 @@ function createCustomElement(type, classes) {
 
 function addItemToDOM(item) {
   const li = document.createElement('li');
-  li.appendChild(document.createTextNode(item));
+  li.appendChild(document.createTextNode(item.trim()));
 
   const removeBtn = createCustomElement('button', 'remove-item btn-link');
   const icon = createCustomElement('i', 'fa-regular fa-trash-alt');
@@ -63,7 +68,7 @@ function addItemToStorage(item) {
   const itemsFromStorage = getItemsFromStorage();
 
   // Add new item to array
-  itemsFromStorage.push(item);
+  itemsFromStorage.push(item.trim());
 
   // Convert to JSON string and set to local storage
   localStorage.setItem('items', JSON.stringify(itemsFromStorage));
@@ -88,6 +93,12 @@ function onClickItem(e) {
     // console.log('Edit mode');
     setItemToEdit(e.target);
   }
+}
+
+function checkDuplicates(item) {
+  const itemsFromStorage = getItemsFromStorage();
+
+  return itemsFromStorage.includes(item);
 }
 
 function setItemToEdit(item) {

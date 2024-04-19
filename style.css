@@ -41,6 +41,7 @@ h1 {
   font-size: 2rem;
   letter-spacing: -0.02em;
   font-family: inherit;
+  margin-top: 0;
 }
 
 .title-icon {
@@ -62,11 +63,14 @@ h1 {
 
 .container {
   max-width: 500px;
-  margin: 1rem auto;
+  margin: 1rem auto 2rem;
   padding: 20px;
 }
 
 /* Form & Input */
+input, textarea, button {
+  font-family: inherit;
+}
 input[type="text"]:not(.form-input-filter) {
   width: 100%;
   font-size: 18px;
@@ -78,7 +82,7 @@ input[type="text"]:not(.form-input-filter) {
 }
 
 input[type="text"]:not(.form-input-filter):focus {
-  outline:1px solid #BABABA;
+  outline: 2px solid #BABABA;
 }
 
 .form-input-filter {
@@ -104,7 +108,7 @@ input[type="text"]:not(.form-input-filter):focus {
   text-transform: uppercase;
   font-weight: bold;
   letter-spacing: .02em;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
 }
 
 .btn.primary {
@@ -146,6 +150,11 @@ input[type="text"]:not(.form-input-filter):focus {
   background-color: #f1f1f1;
 }
 
+.btn i {
+  display: inline-block;
+  margin-right: 0.25rem;
+}
+
 .text-red {
   color: red;
 }
@@ -171,6 +180,10 @@ input[type="text"]:not(.form-input-filter):focus {
   transition: outline .2s ease-out;
   outline: 0px solid  rgba(0, 0, 0, 0);
   background-color: #FFFFFF;
+}
+
+.items li i, button i {
+  font-size: 1rem;
 }
 
 @media (max-width: 500px) {
@@ -222,7 +235,7 @@ body.edit-mode {
 }
 
 .edit-mode li.active {
-  outline: 1px solid #BABABA;
+  outline: 2px solid #BABABA;
 }
 
 #edit-panel {
